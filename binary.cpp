@@ -1,7 +1,6 @@
 #include <iostream>
+#include <type_traits>
 
-namespace binary {
-    
 template <char... chars>
 struct Binary {
     static constexpr char buf[] = {(chars+0x30)..., 0};
@@ -22,23 +21,18 @@ namespace detail {
 }
 
 
-template <size_t N>
+template <size_t N, class=void>
 struct BinaryCreator {
     using type = typename detail::BinaryConcat<typename BinaryCreator<N/2>::type, Binary<N%2>>::type;
 };
 
-template <>
-struct BinaryCreator<1> {
-    using type = Binary<1>;
+template <size_t N>
+struct BinaryCreator<N, std::enable_if_t<N<2>> {
+    using type = Binary<N>;
 };
 
-template <>
-struct BinaryCreator<0> {
-    using type = Binary<0>;
-};
-
-}
 
 int main() {
-    std::cout << binary::BinaryCreator<5>::type::value() << "\n";
+    constexpr auto value = BinaryCreator<5>::type::value();
+    std::cout << value << "\n";
 }
