@@ -9,8 +9,8 @@ add_library(cpp_template_gear INTERFACE)
 add_library(CPPTemplateGear::CPPTemplateGear ALIAS cpp_template_gear)
 
 target_include_directories(
-	CPPTemplateGear::CPPTemplateGear
-	INTERFACE ${CMAKE_CURRENT_LIST_DIR}
+	cpp_template_gear
+	INTERFACE ${CMAKE_CURRENT_LIST_DIR}/include
 )
 
 add_subdirectory(test)
