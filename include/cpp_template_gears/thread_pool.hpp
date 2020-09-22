@@ -8,7 +8,7 @@
 namespace cpp_template_gears {
 
 template <size_t N>
-class ThreadPool {
+class ThreadPool  {
 public:
     ThreadPool() {
         for (auto i=0u; i<N; ++i) {
