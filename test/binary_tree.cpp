@@ -424,6 +424,26 @@ Node *RebuildTree(const std::vector<int> &preseq, const std::vector<int> &inseq)
     return RebuildTree(preview, inview);
 }
 
+void CalculatePostOrderSequenceImpl(const SeqView &preview, const SeqView &inview, std::deque<int> &vals) {
+    if (preview.empty() || inview.empty()) {
+        return;
+    }
+
+    auto val = preview.front();
+    auto index = inview.index(val);
+    auto count = inview.q - index - 1;
+    vals.push_front(val);
+    CalculatePostOrderSequenceImpl(SeqView{preview.seq, preview.q-count, preview.q}, SeqView{inview.seq, index+1, inview.q}, vals);
+    CalculatePostOrderSequenceImpl(SeqView{preview.seq, preview.p+1, preview.q-count}, SeqView{inview.seq, inview.p, index}, vals);
+}   
+
+std::deque<int> CalculatePostOrderSequence(const std::vector<int> &preseq, const std::vector<int> &inseq) {
+    std::deque<int> vals;
+    SeqView preview{preseq, 0, preseq.size()}, inview{inseq, 0, inseq.size()};
+    CalculatePostOrderSequenceImpl(preview, inview, vals);
+    return vals;
+}
+
 ///后序序列和中序序列作为输入进行重建
 class Tree {
 public:
